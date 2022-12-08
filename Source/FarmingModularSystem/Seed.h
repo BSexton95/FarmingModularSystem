@@ -27,12 +27,15 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// A Sphere to detect collision
 	UPROPERTY(VisibleAnywhere)
 	class USphereComponent* CollisionSphere;
 
+	// Mesh component
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* Mesh;
 
+	// Data of this seed
 	UPROPERTY(EditAnywhere)
 	class USeedData* SeedData;
 
