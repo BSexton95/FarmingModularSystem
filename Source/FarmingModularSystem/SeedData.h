@@ -18,8 +18,6 @@ class FARMINGMODULARSYSTEM_API USeedData : public UDataAsset
 	FString Name;
 
 	UPROPERTY(EditAnywhere)
-	int TimeToGrowth;
+	int DaysToGrowth;
 
-	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* Mesh;
 };
