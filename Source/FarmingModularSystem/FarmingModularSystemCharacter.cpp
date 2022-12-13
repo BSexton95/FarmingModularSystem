@@ -8,6 +8,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "SeedData.h"
+#include "Seed.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AFarmingModularSystemCharacter
@@ -16,6 +18,8 @@ AFarmingModularSystemCharacter::AFarmingModularSystemCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AFarmingModularSystemCharacter::OnOverlapBegin);
 
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
@@ -74,6 +78,24 @@ void AFarmingModularSystemCharacter::SetupPlayerInputComponent(class UInputCompo
 
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AFarmingModularSystemCharacter::OnResetVR);
+}
+
+void AFarmingModularSystemCharacter::OnOverlapBegin(UPrimitiveComponent* overlapedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int bodyIndex, bool bFromSweep, const FHitResult& hitResult)
+{
+	USeedData* seed;
+
+	if (otherActor == m_seed)
+	{
+		seed = m_seed->GetSeedData();
+	}
+
+	if (otherActor != nullptr && otherActor != this && otherComponent != nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("seed in invetory."));
+		m_seedData.Add(seed);
+
+		
+	}
 }
 
 

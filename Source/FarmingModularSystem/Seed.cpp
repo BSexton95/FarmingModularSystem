@@ -4,6 +4,7 @@
 #include "Seed.h"
 #include <Components/SphereComponent.h>
 #include <Components/MeshComponent.h>
+#include "SeedData.h"
 
 // Sets default values
 ASeed::ASeed()
@@ -42,8 +43,8 @@ void ASeed::OnOverlapBegin(UPrimitiveComponent* overlapedComponent, AActor* othe
 	// If the other actor and the other component is not null and the other actor is not this actor...
 	if (otherActor != nullptr && otherActor != this && otherComponent != nullptr)
 	{
-		//...
-		Destroy();
+		Mesh->SetVisibility(false);
+		Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
 }
 

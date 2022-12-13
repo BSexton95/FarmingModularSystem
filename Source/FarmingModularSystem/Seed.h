@@ -15,6 +15,8 @@ public:
 	// Sets default values for this actor's properties
 	ASeed();
 
+private:
+	class AGameManager* GameManger;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -22,6 +24,9 @@ protected:
 public:
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* overlapedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent,int bodyIndex, bool bFromSweep, const FHitResult& hitResult);
+
+	class USeedData* GetSeedData() { return SeedData; }
+
 
 public:	
 	// Called every frame
@@ -37,6 +42,11 @@ public:
 
 	// Data of this seed
 	UPROPERTY(EditAnywhere)
-	class USeedData* SeedData;
+	USeedData* SeedData;
+
+private:
+	class AGameManager* m_gameManager;
+
+	friend class AGameManager;
 
 };

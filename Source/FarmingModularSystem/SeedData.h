@@ -15,7 +15,7 @@ class FARMINGMODULARSYSTEM_API USeedData : public UDataAsset
 	GENERATED_BODY()
 	
 	UPROPERTY(EditAnywhere)
-	FString Name;
+	FString Type;
 
 	UPROPERTY(EditAnywhere)
 	int DaysToGrowth;

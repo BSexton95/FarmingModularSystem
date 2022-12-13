@@ -68,5 +68,17 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+public:
+	UFUNCTION()
+	void OnOverlapBegin(UPrimitiveComponent* overlapedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int bodyIndex, bool bFromSweep, const FHitResult& hitResult);
+
+public:
+	UPROPERTY(EditAnywhere)
+	TArray<class USeedData*> m_seedData;
+
+private:
+	USeedData* m_seedInfo;
+	class ASeed* m_seed;
 };
 
