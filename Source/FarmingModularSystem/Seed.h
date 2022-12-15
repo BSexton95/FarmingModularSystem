@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Seed.generated.h"
 
+//DECLARE_DELEGATE(FOnPlantedSeedDelegate);
+
 UCLASS()
 class FARMINGMODULARSYSTEM_API ASeed : public AActor
 {
@@ -15,8 +17,6 @@ public:
 	// Sets default values for this actor's properties
 	ASeed();
 
-private:
-	class AGameManager* GameManger;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -27,6 +27,8 @@ public:
 
 	class USeedData* GetSeedData() { return SeedData; }
 
+	/*UPROPERTY(BlueprintNativeEvent, BlueprintCallable)
+	void OnPlantedSeed();*/
 
 public:	
 	// Called every frame
@@ -44,9 +46,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	USeedData* SeedData;
 
-private:
-	class AGameManager* m_gameManager;
-
-	friend class AGameManager;
+public:
+	//Event
+	/*FOnPlantedSeedDelegate PlantedSeed;*/
 
 };

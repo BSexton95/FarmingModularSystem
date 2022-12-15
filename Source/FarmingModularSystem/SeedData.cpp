@@ -3,3 +3,7 @@
 
 #include "SeedData.h"
 
+void USeedData::PrintObjectInfo()
+{
+	UE_LOG(LogType, Display, TEXT("Type: %s, Days To Growth: %d"), *Type, DaysToGrowth);
+}

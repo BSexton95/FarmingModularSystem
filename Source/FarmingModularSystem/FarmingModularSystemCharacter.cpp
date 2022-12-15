@@ -10,6 +10,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "SeedData.h"
 #include "Seed.h"
+#include <Logging/LogMacros.h>
 
 //////////////////////////////////////////////////////////////////////////
 // AFarmingModularSystemCharacter
@@ -19,7 +20,7 @@ AFarmingModularSystemCharacter::AFarmingModularSystemCharacter()
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
-	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AFarmingModularSystemCharacter::OnOverlapBegin);
+	/*GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AFarmingModularSystemCharacter::OnActorBeginOverlap);*/
 
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
@@ -80,22 +81,32 @@ void AFarmingModularSystemCharacter::SetupPlayerInputComponent(class UInputCompo
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AFarmingModularSystemCharacter::OnResetVR);
 }
 
-void AFarmingModularSystemCharacter::OnOverlapBegin(UPrimitiveComponent* overlapedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int bodyIndex, bool bFromSweep, const FHitResult& hitResult)
+void AFarmingModularSystemCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	USeedData* seed;
+	/*ASeed* newSeed;
+	USeedData* newSeedData;*/
 
-	if (otherActor == m_seed)
+	/*if (otherActor == m_seed)
 	{
-		seed = m_seed->GetSeedData();
-	}
-
-	if (otherActor != nullptr && otherActor != this && otherComponent != nullptr)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("seed in invetory."));
-		m_seedData.Add(seed);
-
 		
+	}*/
+	
+	if (ASeed* seed = Cast<ASeed>(OtherActor))
+	{
+		/*newSeed = m_seed;
+		newSeedData = m_seed->SeedData;
+		newSeed->SeedData = newSeedData;*/
+		m_seedArray.Add(seed);
+		seed->SeedData->PrintObjectInfo();
+
+		if (m_seedArray.Contains(seed))
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Seed added to array"));
+		else
+			m_seedArray.Add(seed);
 	}
+
+	
+	
 }
 
 

@@ -71,14 +71,13 @@ public:
 
 public:
 	UFUNCTION()
-	void OnOverlapBegin(UPrimitiveComponent* overlapedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int bodyIndex, bool bFromSweep, const FHitResult& hitResult);
+	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 public:
-	UPROPERTY(EditAnywhere)
-	TArray<class USeedData*> m_seedData;
+	UPROPERTY()
+	TArray<class ASeed*> m_seedArray;
 
 private:
-	USeedData* m_seedInfo;
-	class ASeed* m_seed;
+	class USeedData* m_seedData;
 };
 
