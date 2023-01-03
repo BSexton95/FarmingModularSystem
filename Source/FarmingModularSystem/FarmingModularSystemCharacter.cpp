@@ -83,30 +83,15 @@ void AFarmingModularSystemCharacter::SetupPlayerInputComponent(class UInputCompo
 
 void AFarmingModularSystemCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	/*ASeed* newSeed;
-	USeedData* newSeedData;*/
-
-	/*if (otherActor == m_seed)
-	{
-		
-	}*/
-	
 	if (ASeed* seed = Cast<ASeed>(OtherActor))
 	{
-		/*newSeed = m_seed;
-		newSeedData = m_seed->SeedData;
-		newSeed->SeedData = newSeedData;*/
-		m_seedArray.Add(seed);
-		seed->SeedData->PrintObjectInfo();
-
-		if (m_seedArray.Contains(seed))
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Seed added to array"));
-		else
+		if (!m_seedArray.Contains(seed))
+		{
 			m_seedArray.Add(seed);
+			seed->SeedData->PrintObjectInfo();
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Seed added to array"));
+		}
 	}
-
-	
-	
 }
 
 

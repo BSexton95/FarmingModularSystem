@@ -26,6 +26,7 @@ public:
 	void OnOverlapBegin(UPrimitiveComponent* overlapedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent,int bodyIndex, bool bFromSweep, const FHitResult& hitResult);
 
 	class USeedData* GetSeedData() { return SeedData; }
+	void SetSeedData(USeedData* seedData) { SeedData = seedData; }
 
 	/*UPROPERTY(BlueprintNativeEvent, BlueprintCallable)
 	void OnPlantedSeed();*/

@@ -1,8 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Plot.h"/*
-#include <Components/StaticMeshComponent>*/
+#include "Plot.h"
+#include "Seed.h"
+#include "FarmingModularSystemCharacter.h"
+#include <Components/BoxComponent.h>
+#include <GameFramework/Actor.h>
+#include <Engine/Engine.h>
 
 // Sets default values
 APlot::APlot()
@@ -12,6 +16,23 @@ APlot::APlot()
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Plot"));
 	RootComponent = Mesh;
+
+	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Box"));
+	BoxComponent->SetupAttachment(Mesh);
+
+	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &APlot::OnOverlapBegin);
+}
+
+void APlot::SeedPlanted(ASeed* seedPlanted)
+{
+	/*seedPlanted->SetSeedData(m_seedPlanted->GetSeedData());
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Seed added to array"));*/
+}
+
+void APlot::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor->IsA(AFarmingModularSystemCharacter::StaticClass()))
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Press E"));
 }
 
 // Called when the game starts or when spawned
