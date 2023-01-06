@@ -11,8 +11,6 @@
 #include "SeedData.h"
 #include "Seed.h"
 #include "Plot.h"
-#include <Logging/LogMacros.h>
-#include <Delegates/Delegate.h>
 
 //////////////////////////////////////////////////////////////////////////
 // AFarmingModularSystemCharacter
@@ -52,6 +50,9 @@ AFarmingModularSystemCharacter::AFarmingModularSystemCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+	
+	
+
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -81,6 +82,8 @@ void AFarmingModularSystemCharacter::SetupPlayerInputComponent(class UInputCompo
 
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AFarmingModularSystemCharacter::OnResetVR);
+
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AFarmingModularSystemCharacter::OnInteract);
 }
 
 void AFarmingModularSystemCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -99,32 +102,34 @@ void AFarmingModularSystemCharacter::OnOverlapBegin(UPrimitiveComponent* Overlap
 
 	if (APlot* plot = Cast<APlot>(OtherActor))
 	{
-		
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Press E"));
 	}
 }
 
-//void AFarmingModularSystemCharacter::OnInteract()
-//{
-//	TArray<AActor*> overlappingActors;
-//	GetOverlappingActors(overlappingActors);
-//
-//	for (AActor* actor : overlappingActors)
-//	{
-//		APlot* plot = Cast<APlot>(actor);
-//		if (plot)
-//		{
-//			plot->Interact(this);
-//		}
-//	}
-//}
-
-void AFarmingModularSystemCharacter::Tick(float DeltaTime)
+void AFarmingModularSystemCharacter::OnInteract()
 {
-	Super::Tick(DeltaTime);
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("E Was Pressed!!"));
+	
+	if (SeedArray.Num() == 0)
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Array is empty"));
+	else
+	{
+		ASeed* seedPlanted = SeedArray[0];
 
-	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::E))
-		OnInteract.Broadcast();
+		//OnSeedPlanted.ExecuteIfBound();
+		PlotActor->SeedPlanted(seedPlanted);
+		SeedArray.RemoveSingle(seedPlanted);
+
+	}
+
+
+	for (ASeed* seed : SeedArray)
+	{
+		UE_LOG(LogTemp, Log, TEXT("Seeds Left: %s, Days To Growth: %d"), *seed->GetSeedData()->SeedType(), seed->GetSeedData()->SeedGrowthTime());
+	}
+	
 }
+
 void AFarmingModularSystemCharacter::OnResetVR()
 {
 	// If FarmingModularSystem is added to a project via 'Add Feature' in the Unreal Editor the dependency on HeadMountedDisplay in FarmingModularSystem.Build.cs is not automatically propagated

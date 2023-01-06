@@ -6,8 +6,6 @@
 #include "GameFramework/Character.h"
 #include "FarmingModularSystemCharacter.generated.h"
 
-DECLARE_DELEGATE(FOnInteract);
-
 UCLASS(config=Game)
 class AFarmingModularSystemCharacter : public ACharacter
 {
@@ -32,7 +30,6 @@ public:
 	float BaseLookUpRate;
 
 protected:
-	virtual void Tick(float DeltaTime) override;
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();
@@ -84,14 +81,20 @@ public:
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	/*UFUNCTION()
-	void OnInteract();*/
+	UFUNCTION()
+	void OnInteract();
 
-	UPROPERTY(BlueprintAssignable)
-	FOnInteract OnInteract;
+public:
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
+	// Pointer to the plot actor
+	class APlot* PlotActor;
+
 private:
 	class USeedData* m_seedData;
-	int m_maxArraySize = 2;
+	int m_maxArraySize = 4;
+
+	// An array that holds seeds
+	// This represents an inventory in the character class
 	UPROPERTY()
 	TArray<class ASeed*> SeedArray;
 };

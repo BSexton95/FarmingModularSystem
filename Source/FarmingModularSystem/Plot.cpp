@@ -6,7 +6,6 @@
 #include "FarmingModularSystemCharacter.h"
 #include <Components/BoxComponent.h>
 #include <GameFramework/Actor.h>
-#include <Engine/Engine.h>
 
 // Sets default values
 APlot::APlot()
@@ -28,11 +27,13 @@ void APlot::BeginPlay()
 {
 	Super::BeginPlay();
 
-	AFarmingModularSystemCharacter* player = Cast<AFarmingModularSystemCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	if (player)
-	{
-		player->OnInteract.AddDynamic(this, &APlot::Interact);
-	}
+}
+
+void APlot::SeedPlanted(ASeed* seedPlanted)
+{
+	//m_seedPlanted->SetSeedData(m_seedPlanted->GetSeedData());
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Seed has been planted"));
+
 }
 
 // Called every frame
@@ -42,25 +43,9 @@ void APlot::Tick(float DeltaTime)
 
 }
 
-void APlot::SeedPlanted(ASeed* seedPlanted)
-{
-	/*seedPlanted->SetSeedData(m_seedPlanted->GetSeedData());
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Seed added to array"));*/
-}
-
 void APlot::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor->IsA(AFarmingModularSystemCharacter::StaticClass()))
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Press E"));
+	/*if (OtherActor->IsA(AFarmingModularSystemCharacter::StaticClass()))
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Press E"));*/
 }
-
-void APlot::Interact(AFarmingModularSystemCharacter* player)
-{
-	//plantedSeed
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Interaction with actor!"));
-}
-
-
-
-
 

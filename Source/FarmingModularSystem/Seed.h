@@ -6,8 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "Seed.generated.h"
 
-//DECLARE_DELEGATE(FOnPlantedSeedDelegate);
-
 UCLASS()
 class FARMINGMODULARSYSTEM_API ASeed : public AActor
 {
@@ -24,7 +22,7 @@ protected:
 public:
 	/// <returns>The current data stored in the seed data</returns>
 	class USeedData* GetSeedData() { return SeedData; }
-
+	void SetSeedData(USeedData* seedData) { SeedData = seedData; }
 	/*UPROPERTY(BlueprintNativeEvent, BlueprintCallable)
 	void OnPlantedSeed();*/
 
@@ -43,9 +41,5 @@ public:
 	// Data of this seed
 	UPROPERTY(EditAnywhere)
 	USeedData* SeedData;
-
-public:
-	//Event
-	/*FOnPlantedSeedDelegate PlantedSeed;*/
 	
 };
