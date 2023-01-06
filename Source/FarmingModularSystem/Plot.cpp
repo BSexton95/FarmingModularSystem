@@ -23,6 +23,25 @@ APlot::APlot()
 	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &APlot::OnOverlapBegin);
 }
 
+// Called when the game starts or when spawned
+void APlot::BeginPlay()
+{
+	Super::BeginPlay();
+
+	AFarmingModularSystemCharacter* player = Cast<AFarmingModularSystemCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	if (player)
+	{
+		player->OnInteract.AddDynamic(this, &APlot::Interact);
+	}
+}
+
+// Called every frame
+void APlot::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
 void APlot::SeedPlanted(ASeed* seedPlanted)
 {
 	/*seedPlanted->SetSeedData(m_seedPlanted->GetSeedData());
@@ -35,19 +54,13 @@ void APlot::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Press E"));
 }
 
-// Called when the game starts or when spawned
-void APlot::BeginPlay()
+void APlot::Interact(AFarmingModularSystemCharacter* player)
 {
-	Super::BeginPlay();
-	
+	//plantedSeed
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Interaction with actor!"));
 }
 
-// Called every frame
-void APlot::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 
-}
 
 
 

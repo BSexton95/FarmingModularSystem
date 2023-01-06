@@ -10,7 +10,9 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "SeedData.h"
 #include "Seed.h"
+#include "Plot.h"
 #include <Logging/LogMacros.h>
+#include <Delegates/Delegate.h>
 
 //////////////////////////////////////////////////////////////////////////
 // AFarmingModularSystemCharacter
@@ -85,16 +87,44 @@ void AFarmingModularSystemCharacter::OnOverlapBegin(UPrimitiveComponent* Overlap
 {
 	if (ASeed* seed = Cast<ASeed>(OtherActor))
 	{
-		if (!m_seedArray.Contains(seed))
+		if (SeedArray.Num() < m_maxArraySize)
 		{
-			m_seedArray.Add(seed);
+			SeedArray.Add(seed);
 			seed->SeedData->PrintObjectInfo();
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Seed added to array"));
 		}
+		else
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Array is full"));
+	}
+
+	if (APlot* plot = Cast<APlot>(OtherActor))
+	{
+		
 	}
 }
 
+//void AFarmingModularSystemCharacter::OnInteract()
+//{
+//	TArray<AActor*> overlappingActors;
+//	GetOverlappingActors(overlappingActors);
+//
+//	for (AActor* actor : overlappingActors)
+//	{
+//		APlot* plot = Cast<APlot>(actor);
+//		if (plot)
+//		{
+//			plot->Interact(this);
+//		}
+//	}
+//}
 
+void AFarmingModularSystemCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::E))
+		OnInteract.Broadcast();
+}
 void AFarmingModularSystemCharacter::OnResetVR()
 {
 	// If FarmingModularSystem is added to a project via 'Add Feature' in the Unreal Editor the dependency on HeadMountedDisplay in FarmingModularSystem.Build.cs is not automatically propagated

@@ -22,11 +22,8 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	UFUNCTION()
-	void OnOverlapBegin(UPrimitiveComponent* overlapedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent,int bodyIndex, bool bFromSweep, const FHitResult& hitResult);
-
+	/// <returns>The current data stored in the seed data</returns>
 	class USeedData* GetSeedData() { return SeedData; }
-	void SetSeedData(USeedData* seedData) { SeedData = seedData; }
 
 	/*UPROPERTY(BlueprintNativeEvent, BlueprintCallable)
 	void OnPlantedSeed();*/
@@ -37,7 +34,7 @@ public:
 
 	// A Sphere to detect collision
 	UPROPERTY(VisibleAnywhere)
-	class USphereComponent* CollisionSphere;
+	class UBoxComponent* CollisionBox;
 
 	// Mesh component
 	UPROPERTY(VisibleAnywhere)
@@ -50,5 +47,5 @@ public:
 public:
 	//Event
 	/*FOnPlantedSeedDelegate PlantedSeed;*/
-
+	
 };

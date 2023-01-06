@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "FarmingModularSystemCharacter.generated.h"
 
+DECLARE_DELEGATE(FOnInteract);
+
 UCLASS(config=Game)
 class AFarmingModularSystemCharacter : public ACharacter
 {
@@ -30,6 +32,7 @@ public:
 	float BaseLookUpRate;
 
 protected:
+	virtual void Tick(float DeltaTime) override;
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();
@@ -58,6 +61,8 @@ protected:
 	/** Handler for when a touch input stops. */
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
 
+	
+
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -69,15 +74,25 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	/// <summary>
+	/// Allows other class to access the array of seeds but not change it
+	/// </summary>
+	/// <returns>The seed array</returns>
+	const TArray<class ASeed*> GetSeedArray() const { return SeedArray; }
+
 public:
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-public:
-	UPROPERTY()
-	TArray<class ASeed*> m_seedArray;
+	/*UFUNCTION()
+	void OnInteract();*/
 
+	UPROPERTY(BlueprintAssignable)
+	FOnInteract OnInteract;
 private:
 	class USeedData* m_seedData;
+	int m_maxArraySize = 2;
+	UPROPERTY()
+	TArray<class ASeed*> SeedArray;
 };
 
