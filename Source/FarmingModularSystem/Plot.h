@@ -34,6 +34,9 @@ public:
 	UFUNCTION()
 	void SeedPlanted(class ASeed* seedPlanted);
 
+	bool HasSeed() { return m_hasSeed; }
+	void PlotHasSeed(bool hasSeed) { m_hasSeed = hasSeed; }
+
 public:
 	UPROPERTY()
 	class AFarmingModularSystemCharacter* Player;
@@ -48,4 +51,5 @@ public:
 
 private:
 	ASeed* m_seedPlanted;
+	bool m_hasSeed = false;
 };

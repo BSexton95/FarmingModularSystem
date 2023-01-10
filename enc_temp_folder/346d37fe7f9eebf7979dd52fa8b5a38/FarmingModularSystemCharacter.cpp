@@ -108,9 +108,6 @@ void AFarmingModularSystemCharacter::OnOverlapBegin(UPrimitiveComponent* Overlap
 
 void AFarmingModularSystemCharacter::OnInteract()
 {
-	if (!PlotActor)
-		return;
-
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("E Was Pressed!!"));
 	
 	if (SeedArray.Num() == 0)
