@@ -89,6 +89,9 @@ public:
 	// Pointer to the plot actor
 	class APlot* PlotActor;
 
+	UPROPERTY()
+	class UCapsuleComponent* TriggerCapsule;
+
 private:
 	class USeedData* m_seedData;
 	int m_maxArraySize = 4;
