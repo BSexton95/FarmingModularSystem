@@ -99,7 +99,7 @@ void AFarmingModularSystemCharacter::OnOverlapBegin(UPrimitiveComponent* Overlap
 
 	if (APlot* plot = Cast<APlot>(OtherActor))
 	{
-		m_plotActor = plot;
+		PlotActor = plot;
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Press E"));
 	}
 	else
@@ -108,23 +108,19 @@ void AFarmingModularSystemCharacter::OnOverlapBegin(UPrimitiveComponent* Overlap
 
 void AFarmingModularSystemCharacter::OnInteract()
 {
-	if (!m_plotActor)
+	if (!PlotActor)
 		return;
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("E Was Pressed!!"));
 	
 	if (SeedArray.Num() == 0)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Array is empty"));
-	else if (m_plotActor->HasSeed() == false)
+	else
 	{
 		ASeed* seedPlanted = SeedArray[0];
 
-		m_plotActor->SeedPlanted(seedPlanted);
+		PlotActor->SeedPlanted(seedPlanted);
 		SeedArray.RemoveSingle(seedPlanted);
-	}
-	else if (m_plotActor->HasSeed() == true)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("No"));
 	}
 
 	for (ASeed* seed : SeedArray)

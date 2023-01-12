@@ -35,10 +35,19 @@ void APlot::SeedPlanted(ASeed* seedPlanted)
 		return;
 
 	//m_seedPlanted->SetSeedData(m_seedPlanted->GetSeedData());
+	if (seedPlanted || m_hasSeed == true)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Plot already has seed"));
+		return;
+	}
+	else
+	{
+		m_hasSeed = true;
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Seed has been planted"));
+		return;
+	}
 	
-	m_hasSeed = true;
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Seed has been planted"));
-	
+
 }
 
 // Called every frame

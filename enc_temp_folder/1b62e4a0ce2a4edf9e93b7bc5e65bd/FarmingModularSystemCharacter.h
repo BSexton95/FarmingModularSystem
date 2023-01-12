@@ -85,15 +85,14 @@ public:
 	void OnInteract();
 
 public:
-	
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
+	// Pointer to the plot actor
+	class APlot* PlotActor;
 
 	UPROPERTY()
 	class UCapsuleComponent* TriggerCapsule;
 
 private:
-	// Pointer to the plot actor
-	UPROPERTY()
-	class APlot* m_plotActor;
 	class USeedData* m_seedData;
 	int m_maxArraySize = 4;
 
