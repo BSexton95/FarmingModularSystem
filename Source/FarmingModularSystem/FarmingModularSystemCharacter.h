@@ -84,11 +84,7 @@ public:
 	UFUNCTION()
 	void OnPlanted();
 
-	void OnHarvest();
-
 public:
-	
-
 	UPROPERTY()
 	class UCapsuleComponent* TriggerCapsule;
 

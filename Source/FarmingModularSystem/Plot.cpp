@@ -36,15 +36,8 @@ void APlot::SeedPlanted(ASeed* seedPlanted)
 	if (seedPlanted == nullptr)
 		return;
 
-	//m_seedPlanted->SetSeedData(m_seedPlanted->GetSeedData());
-	
-	
-
 	m_hasSeed = true;
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Seed has been planted"));
-	
-	//GetWorld()->GetTimerManager().SetTimer(TimerToGrowth, this, &APlot::OnHarvest, 1.0f, true, seedData->SeedGrowthTime());
-	
 }
 
 void APlot::Harvest()
@@ -58,7 +51,6 @@ void APlot::OnHarvest()
 {
 	if (GetWorldTimerManager().GetTimerRemaining(TimerToGrowth) <= 0)
 	{
-		
 		GetWorldTimerManager().ClearTimer(TimerToGrowth);
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Plant ready to be harvested"));
 		m_canHarvest = true;
@@ -77,7 +69,6 @@ void APlot::Tick(float DeltaTime)
 
 void APlot::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	/*if (OtherActor->IsA(AFarmingModularSystemCharacter::StaticClass()))
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Press E"));*/
+	
 }
 

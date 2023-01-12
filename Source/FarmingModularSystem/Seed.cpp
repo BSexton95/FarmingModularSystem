@@ -20,6 +20,8 @@ ASeed::ASeed()
 	// Create a mesh that is attacehd to the collision sphere
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(RootComponent);
+
+	CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ASeed::OnOverlapBegin);
 }
 
 // Called when the game starts or when spawned
@@ -34,6 +36,14 @@ void ASeed::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ASeed::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (APawn* player = Cast<APawn>(OtherActor))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("This is the seed"));
+	}
 }
 
 
