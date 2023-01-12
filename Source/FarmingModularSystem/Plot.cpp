@@ -3,9 +3,11 @@
 
 #include "Plot.h"
 #include "Seed.h"
+#include "SeedData.h"
 #include "FarmingModularSystemCharacter.h"
 #include <Components/BoxComponent.h>
 #include <GameFramework/Actor.h>
+#include <TimerManager.h>
 
 // Sets default values
 APlot::APlot()
@@ -36,9 +38,34 @@ void APlot::SeedPlanted(ASeed* seedPlanted)
 
 	//m_seedPlanted->SetSeedData(m_seedPlanted->GetSeedData());
 	
+	
+
 	m_hasSeed = true;
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Seed has been planted"));
 	
+	//GetWorld()->GetTimerManager().SetTimer(TimerToGrowth, this, &APlot::OnHarvest, 1.0f, true, seedData->SeedGrowthTime());
+	
+}
+
+void APlot::Harvest()
+{
+		m_hasSeed = false;
+		m_canHarvest = false;
+		UE_LOG(LogTemp, Warning, TEXT("RESET"));
+}
+
+void APlot::OnHarvest()
+{
+	if (GetWorldTimerManager().GetTimerRemaining(TimerToGrowth) <= 0)
+	{
+		
+		GetWorldTimerManager().ClearTimer(TimerToGrowth);
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Plant ready to be harvested"));
+		m_canHarvest = true;
+		return;
+	}
+	else
+		return;
 }
 
 // Called every frame

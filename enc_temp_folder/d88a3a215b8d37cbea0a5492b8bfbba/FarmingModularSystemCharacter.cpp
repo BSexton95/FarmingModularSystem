@@ -80,7 +80,9 @@ void AFarmingModularSystemCharacter::SetupPlayerInputComponent(class UInputCompo
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AFarmingModularSystemCharacter::OnResetVR);
 
-	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AFarmingModularSystemCharacter::OnInteract);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AFarmingModularSystemCharacter::OnPlanted);
+
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AFarmingModularSystemCharacter::OnHarvest);
 }
 
 void AFarmingModularSystemCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -99,35 +101,49 @@ void AFarmingModularSystemCharacter::OnOverlapBegin(UPrimitiveComponent* Overlap
 
 	if (APlot* plot = Cast<APlot>(OtherActor))
 	{
-		PlotActor = plot;
+		m_plotActor = plot;
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Press E"));
 	}
 	else
 		return;
 }
 
-void AFarmingModularSystemCharacter::OnInteract()
+void AFarmingModularSystemCharacter::OnPlanted()
 {
-	if (!PlotActor)
+	if (!m_plotActor)
 		return;
-
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("E Was Pressed!!"));
 	
 	if (SeedArray.Num() == 0)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Array is empty"));
-	else
+	else if (m_plotActor->HasSeed() == false)
 	{
 		ASeed* seedPlanted = SeedArray[0];
+		USeedData* seedData = seedPlanted->GetSeedData();
 
-		PlotActor->SeedPlanted(seedPlanted);
+		m_plotActor->SeedPlanted(seedPlanted);
+
+		GetWorld()->GetTimerManager().SetTimer(TimerToGrowth, m_plotActor, &APlot::OnHarvest, 1.0f, true, seedData->SeedGrowthTime());
+
 		SeedArray.RemoveSingle(seedPlanted);
 	}
+	else if (m_plotActor->HasSeed() == true)
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Plot currently has seed growing"));
 
 	for (ASeed* seed : SeedArray)
 	{
-		UE_LOG(LogTemp, Log, TEXT("Seeds Left: %s, Days To Growth: %d"), *seed->GetSeedData()->SeedType(), seed->GetSeedData()->SeedGrowthTime());
+		UE_LOG(LogTemp, Log, TEXT("Seeds Left: %s, Days To Growth: %f"), *seed->GetSeedData()->SeedType(), seed->GetSeedData()->SeedGrowthTime());
 	}
 	
+}
+
+void AFarmingModularSystemCharacter::OnHarvest()
+{
+	if (m_plotActor->CanHarvest() == true)
+	{
+		m_plotActor->Harvest();
+	}
+	else
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Wait for plant to finish"));
 }
 
 void AFarmingModularSystemCharacter::OnResetVR()

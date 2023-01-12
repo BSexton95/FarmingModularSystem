@@ -34,22 +34,29 @@ public:
 	UFUNCTION()
 	void SeedPlanted(class ASeed* seedPlanted);
 
+	/// <returns>true if plot has a seed</returns>
 	bool HasSeed() { return m_hasSeed; }
-	void PlotHasSeed(bool hasSeed) { m_hasSeed = hasSeed; }
+
+	UFUNCTION()
+	void Harvest();
+
+	bool CanHarvest() { return m_canHarvest; }
+
+	void OnHarvest();
 
 public:
-	UPROPERTY()
-	class AFarmingModularSystemCharacter* Player;
-
 	UPROPERTY(EditAnywhere)
 	class UStaticMeshComponent* Mesh;
 
 	UPROPERTY(EditAnywhere)
 	class UBoxComponent* BoxComponent;
 
+	FTimerHandle TimerToGrowth;
 	//FOnSeedPlantedDelegate OnSeedPlanted;
 
 private:
 	ASeed* m_seedPlanted;
 	bool m_hasSeed = false;
+	bool m_canHarvest = false;
+	
 };

@@ -23,8 +23,6 @@ public:
 	/// <returns>The current data stored in the seed data</returns>
 	class USeedData* GetSeedData() { return SeedData; }
 	void SetSeedData(USeedData* seedData) { SeedData = seedData; }
-	/*UPROPERTY(BlueprintNativeEvent, BlueprintCallable)
-	void OnPlantedSeed();*/
 
 public:	
 	// Called every frame

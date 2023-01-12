@@ -80,7 +80,7 @@ void AFarmingModularSystemCharacter::SetupPlayerInputComponent(class UInputCompo
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AFarmingModularSystemCharacter::OnResetVR);
 
-	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AFarmingModularSystemCharacter::OnInteract);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AFarmingModularSystemCharacter::OnPlanted);
 }
 
 void AFarmingModularSystemCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -106,30 +106,38 @@ void AFarmingModularSystemCharacter::OnOverlapBegin(UPrimitiveComponent* Overlap
 		return;
 }
 
-void AFarmingModularSystemCharacter::OnInteract()
+void AFarmingModularSystemCharacter::OnPlanted()
 {
 	if (!m_plotActor)
 		return;
-
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("E Was Pressed!!"));
 	
 	if (SeedArray.Num() == 0)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Array is empty"));
 	else if (m_plotActor->HasSeed() == false)
 	{
 		ASeed* seedPlanted = SeedArray[0];
+		USeedData* seedData = seedPlanted->GetSeedData();
 
 		m_plotActor->SeedPlanted(seedPlanted);
+
+		GetWorld()->GetTimerManager().SetTimer(TimerToGrowth, m_plotActor, &APlot::OnHarvest, 1.0f, false, seedData->SeedGrowthTime());
+
 		SeedArray.RemoveSingle(seedPlanted);
 	}
 	else if (m_plotActor->HasSeed() == true)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("No"));
+		if (m_plotActor->CanHarvest() == true)
+		{
+			m_plotActor->Harvest();
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Plant Harvest"));
+		}
+		else
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Wait for plant to finish"));
 	}
 
 	for (ASeed* seed : SeedArray)
 	{
-		UE_LOG(LogTemp, Log, TEXT("Seeds Left: %s, Days To Growth: %d"), *seed->GetSeedData()->SeedType(), seed->GetSeedData()->SeedGrowthTime());
+		UE_LOG(LogTemp, Log, TEXT("Seeds Left: %s, Days To Growth: %f"), *seed->GetSeedData()->SeedType(), seed->GetSeedData()->SeedGrowthTime());
 	}
 	
 }

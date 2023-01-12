@@ -16,13 +16,13 @@ class FARMINGMODULARSYSTEM_API USeedData : public UDataAsset
 public:
 	void PrintObjectInfo();
 	FString SeedType() { return Type; }
-	int SeedGrowthTime() { return DaysToGrowth; }
+	float SeedGrowthTime() { return DaysToGrowth; }
 
 public:
 	UPROPERTY(EditAnywhere)
 	FString Type;
 
 	UPROPERTY(EditAnywhere)
-	int DaysToGrowth;
+	float DaysToGrowth;
 
 };
