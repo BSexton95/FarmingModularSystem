@@ -80,65 +80,74 @@ void AFarmingModularSystemCharacter::SetupPlayerInputComponent(class UInputCompo
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AFarmingModularSystemCharacter::OnResetVR);
 
-	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AFarmingModularSystemCharacter::OnPlanted);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AFarmingModularSystemCharacter::OnInteract);
 }
 
 void AFarmingModularSystemCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (ASeed* seed = Cast<ASeed>(OtherActor))
 	{
-		if (SeedArray.Num() < m_maxArraySize)
+		if (SeedArray.Num() == m_maxArraySize)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Array is full"));
+			return;
+		}
+		else
 		{
 			SeedArray.Add(seed);
 			seed->SeedData->PrintObjectInfo();
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Seed added to array"));
 		}
-		else
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Array is full"));
 	}
-
-	if (APlot* plot = Cast<APlot>(OtherActor))
+	else if (APlot* plot = Cast<APlot>(OtherActor))
 	{
 		m_plotActor = plot;
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Press E"));
 	}
-	else
-		return;
 }
 
-void AFarmingModularSystemCharacter::OnPlanted()
+void AFarmingModularSystemCharacter::OnInteract()
 {
-	if (!m_plotActor)
-		return;
-	
-	if (SeedArray.Num() == 0)
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Array is empty"));
-	else if (m_plotActor->HasSeed() == false)
+	if (APlot* newPlot = Cast<APlot>(m_plotActor))
 	{
-		ASeed* seedPlanted = SeedArray[0];
-		USeedData* seedData = seedPlanted->GetSeedData();
+		newPlot = m_plotActor;
 
-		m_plotActor->SeedPlanted(seedPlanted);
+		if (!newPlot)
+			return;
 
-		GetWorld()->GetTimerManager().SetTimer(TimerToGrowth, m_plotActor, &APlot::OnHarvest, 1.0f, false, seedData->SeedGrowthTime());
-
-		SeedArray.RemoveSingle(seedPlanted);
-	}
-	else if (m_plotActor->HasSeed() == true)
-	{
-		if (m_plotActor->CanHarvest() == true)
+		if (!newPlot->HasSeed())
 		{
-			m_plotActor->Harvest();
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Plant Harvest"));
-		}
-		else
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Wait for plant to finish"));
-	}
+			if (SeedArray.Num() <= 0)
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Array is empty"));
+			else
+			{
+				ASeed* seedPlanted = SeedArray[0];
+				USeedData* seedData = seedPlanted->GetSeedData();
 
-	for (ASeed* seed : SeedArray)
-	{
-		UE_LOG(LogTemp, Log, TEXT("Seeds Left: %s, Days To Growth: %f"), *seed->GetSeedData()->SeedType(), seed->GetSeedData()->SeedGrowthTime());
+				newPlot->SeedPlanted(seedPlanted);
+
+				GetWorld()->GetTimerManager().SetTimer(TimerToGrowth, newPlot, &APlot::OnHarvest, 1.0f, false, seedData->SeedGrowthTime());
+
+				SeedArray.RemoveSingle(seedPlanted);
+			}
+		}
+		else if (newPlot->HasSeed() == true)
+		{
+			if (GetWorldTimerManager().GetTimerRemaining(TimerToGrowth) <= 0)
+			{
+				newPlot->Harvest();
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Plant Harvested"));
+			}
+			else
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Wait for plant to finish"));
+		}
+
+		for (ASeed* seed : SeedArray)
+		{
+			UE_LOG(LogTemp, Log, TEXT("Seeds Left: %s, Days To Growth: %f"), *seed->GetSeedData()->SeedType(), seed->GetSeedData()->SeedGrowthTime());
+		}
 	}
+	
 	
 }
 

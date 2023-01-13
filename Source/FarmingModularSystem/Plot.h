@@ -40,7 +40,7 @@ public:
 	UFUNCTION()
 	void Harvest();
 
-	bool CanHarvest() { return m_canHarvest; }
+	//bool CanHarvest() { return m_canHarvest; }
 
 	void OnHarvest();
 
@@ -51,12 +51,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UBoxComponent* BoxComponent;
 
-	FTimerHandle TimerToGrowth;
 	//FOnSeedPlantedDelegate OnSeedPlanted;
 
 private:
 	ASeed* m_seedPlanted;
 	bool m_hasSeed = false;
-	bool m_canHarvest = false;
 	
 };

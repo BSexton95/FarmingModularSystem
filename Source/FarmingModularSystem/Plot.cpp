@@ -8,6 +8,7 @@
 #include <Components/BoxComponent.h>
 #include <GameFramework/Actor.h>
 #include <TimerManager.h>
+#include <GameFramework/Controller.h>
 
 // Sets default values
 APlot::APlot()
@@ -36,6 +37,7 @@ void APlot::SeedPlanted(ASeed* seedPlanted)
 	if (seedPlanted == nullptr)
 		return;
 
+	m_seedPlanted = seedPlanted;
 	m_hasSeed = true;
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Seed has been planted"));
 }
@@ -43,21 +45,21 @@ void APlot::SeedPlanted(ASeed* seedPlanted)
 void APlot::Harvest()
 {
 		m_hasSeed = false;
-		m_canHarvest = false;
+		//m_canHarvest = false;
 		UE_LOG(LogTemp, Warning, TEXT("RESET"));
 }
 
 void APlot::OnHarvest()
 {
-	if (GetWorldTimerManager().GetTimerRemaining(TimerToGrowth) <= 0)
-	{
-		GetWorldTimerManager().ClearTimer(TimerToGrowth);
+	//if (GetWorldTimerManager().GetTimerRemaining(TimerToGrowth) <= 0)
+	//{
+		//GetWorldTimerManager().ClearTimer(TimerToGrowth);
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Plant ready to be harvested"));
-		m_canHarvest = true;
+		//m_canHarvest = true;
 		return;
-	}
+	/*}
 	else
-		return;
+		return;*/
 }
 
 // Called every frame
@@ -69,6 +71,13 @@ void APlot::Tick(float DeltaTime)
 
 void APlot::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	
+	APlayerController* playerController = GetWorld()->GetFirstPlayerController();
+	FKey EKey = EKeys::E;
+
+	if (APawn* player = Cast<APawn>(OtherActor))
+	{
+		if (playerController->IsInputKeyDown(EKey))
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, TEXT("E"));
+	}
 }
 
