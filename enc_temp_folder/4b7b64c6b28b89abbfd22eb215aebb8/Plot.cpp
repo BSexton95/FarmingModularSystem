@@ -35,11 +35,29 @@ void APlot::SeedPlanted(ASeed* seedPlanted)
 	if (seedPlanted == nullptr)
 		return;
 
+	/*UStaticMeshComponent* plantMesh;
+	UStaticMesh* mesh;
+	ConstructorHelpers::FObjectFinder<UStaticMesh>CubeAsset(TEXT("/Engine/BasicShapes/Cube"));
+	if (CubeAsset.Succeeded())
+	{
+		mesh = CubeAsset.Object;
+	}
+
+	plantMesh->SetStaticMesh(mesh);*/
+
 	
+
+	FActorSpawnParameters spawnParams;
+	spawnParams.bNoFail = true;
+
 	m_seedPlanted = seedPlanted;
 	m_hasSeed = true;
 
+	FVector plantLocation = this->GetActorLocation();
+
 	
+
+	m_seedPlanted = GetWorld()->SpawnActor<ASeed>(plantLocation, FRotator::ZeroRotator, spawnParams);
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Seed has been planted"));
 }
 

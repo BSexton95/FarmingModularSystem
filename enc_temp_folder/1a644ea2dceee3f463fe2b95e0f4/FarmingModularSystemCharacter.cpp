@@ -88,6 +88,7 @@ void AFarmingModularSystemCharacter::OnOverlapBegin(UPrimitiveComponent* Overlap
 	if (APlot* plot = Cast<APlot>(OtherActor))
 	{
 		m_plotActor = plot;
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Press E"));
 	}
 }
 
@@ -110,7 +111,6 @@ void AFarmingModularSystemCharacter::OnInteract()
 				USeedData* seedData = seedPlanted->GetSeedData();
 
 				newPlot->SeedPlanted(seedPlanted);
-				seedPlanted->OnPlanted();
 
 				GetWorld()->GetTimerManager().SetTimer(TimerToGrowth, newPlot, &APlot::OnHarvest, 1.0f, false, seedData->SeedGrowthTime());
 

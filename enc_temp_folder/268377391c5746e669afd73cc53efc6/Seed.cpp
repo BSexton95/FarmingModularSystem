@@ -31,11 +31,6 @@ void ASeed::BeginPlay()
 
 }
 
-void ASeed::OnPlanted()
-{
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("This function was hit"));
-}
-
 // Called every frame
 void ASeed::Tick(float DeltaTime)
 {
@@ -59,6 +54,9 @@ void ASeed::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 		{
 			playerCharacterArray.Add(this);
 			this->SeedData->PrintObjectInfo();
+			//playerCharacterArray.Append(playerCharacter->GetSeedArray());
+
+			
 		}
 
 		playerCharacter->SetSeedArray(playerCharacterArray);

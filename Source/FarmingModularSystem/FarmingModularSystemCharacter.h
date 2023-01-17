@@ -76,6 +76,7 @@ public:
 	/// </summary>
 	/// <returns>The seed array</returns>
 	const TArray<class ASeed*> GetSeedArray() const { return SeedArray; }
+	void SetSeedArray(TArray<ASeed*> newSeedArray) { SeedArray = newSeedArray; }
 
 public:
 	UFUNCTION()
@@ -91,12 +92,14 @@ public:
 
 	FTimerHandle TimerToGrowth;
 
+	int MaxArraySize = 4;
+
 private:
 	// Pointer to the plot actor
 	UPROPERTY()
 	class APlot* m_plotActor;
 	class USeedData* m_seedData;
-	int m_maxArraySize = 4;
+	
 
 	// An array that holds seeds
 	// This represents an inventory in the character class
