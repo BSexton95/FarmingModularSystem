@@ -48,7 +48,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UBoxComponent* BoxComponent;
 
-	//FOnSeedPlantedDelegate OnSeedPlanted;
+	UPROPERTY(EditAnywhere)
+	class UMaterialInterface* MeshMaterial;
 
 private:
 	ASeed* m_seedPlanted;

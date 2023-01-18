@@ -4,7 +4,6 @@
 #include "Plot.h"
 #include "Seed.h"
 #include "SeedData.h"
-#include "FarmingModularSystemCharacter.h"
 #include <Components/BoxComponent.h>
 #include <GameFramework/Actor.h>
 #include <TimerManager.h>
@@ -21,6 +20,7 @@ APlot::APlot()
 
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Box"));
 	BoxComponent->SetupAttachment(Mesh);
+
 }
 
 // Called when the game starts or when spawned
@@ -35,11 +35,9 @@ void APlot::SeedPlanted(ASeed* seedPlanted)
 	if (seedPlanted == nullptr)
 		return;
 
-	
 	m_seedPlanted = seedPlanted;
 	m_hasSeed = true;
 
-	
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Seed has been planted"));
 }
 
@@ -52,15 +50,12 @@ void APlot::Harvest()
 
 void APlot::OnHarvest()
 {
-	//if (GetWorldTimerManager().GetTimerRemaining(TimerToGrowth) <= 0)
-	//{
-		//GetWorldTimerManager().ClearTimer(TimerToGrowth);
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Plant ready to be harvested"));
-		//m_canHarvest = true;
-		return;
-	/*}
-	else
-		return;*/
+	UMaterialInstanceDynamic* DynamicMaterial = UMaterialInstanceDynamic::Create(MeshMaterial, Mesh);
+	DynamicMaterial->SetVectorParameterValue(TEXT("Green"), FLinearColor::Green);
+
+	Mesh->SetMaterial(0, DynamicMaterial);
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Plant ready to be harvested"));
+		
 }
 
 // Called every frame

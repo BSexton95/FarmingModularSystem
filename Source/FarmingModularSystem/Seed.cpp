@@ -6,6 +6,7 @@
 #include <Components/MeshComponent.h>
 #include "SeedData.h"
 #include "FarmingModularSystemCharacter.h"
+#include "Plot.h"
 
 // Sets default values
 ASeed::ASeed()
@@ -29,11 +30,6 @@ void ASeed::BeginPlay()
 {
 	Super::BeginPlay();
 
-}
-
-void ASeed::OnPlanted()
-{
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("This function was hit"));
 }
 
 // Called every frame

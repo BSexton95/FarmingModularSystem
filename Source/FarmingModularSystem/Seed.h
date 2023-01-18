@@ -24,8 +24,6 @@ public:
 	class USeedData* GetSeedData() { return SeedData; }
 	void SetSeedData(USeedData* seedData) { SeedData = seedData; }
 
-	void OnPlanted();
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -93,6 +93,7 @@ void AFarmingModularSystemCharacter::OnOverlapBegin(UPrimitiveComponent* Overlap
 
 void AFarmingModularSystemCharacter::OnInteract()
 {
+	
 	if (APlot* newPlot = Cast<APlot>(m_plotActor))
 	{
 		newPlot = m_plotActor;
@@ -110,7 +111,6 @@ void AFarmingModularSystemCharacter::OnInteract()
 				USeedData* seedData = seedPlanted->GetSeedData();
 
 				newPlot->SeedPlanted(seedPlanted);
-				seedPlanted->OnPlanted();
 
 				GetWorld()->GetTimerManager().SetTimer(TimerToGrowth, newPlot, &APlot::OnHarvest, 1.0f, false, seedData->SeedGrowthTime());
 
@@ -133,7 +133,12 @@ void AFarmingModularSystemCharacter::OnInteract()
 			UE_LOG(LogTemp, Log, TEXT("Seeds Left: %s, Days To Growth: %f"), *seed->GetSeedData()->SeedType(), seed->GetSeedData()->SeedGrowthTime());
 		}
 	}
-	
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Can't interact with anything"));
+	}
+
+	m_plotActor = nullptr;
 	
 }
 
