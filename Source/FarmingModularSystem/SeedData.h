@@ -9,7 +9,8 @@
 /**
  * Seed data
  */
-UCLASS()
+
+UCLASS(BlueprintType)
 class FARMINGMODULARSYSTEM_API USeedData : public UDataAsset
 {
 	GENERATED_BODY()
@@ -22,11 +23,11 @@ public:
 
 public:
 	// The type of plant
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString Type;
 
 	// The time to growth
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float TimeToGrowth;
 
 };

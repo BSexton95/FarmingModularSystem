@@ -95,7 +95,7 @@ public:
 	/// <summary>
 	/// This function is called every time the player presses E
 	/// </summary>
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void OnInteract();
 	
 

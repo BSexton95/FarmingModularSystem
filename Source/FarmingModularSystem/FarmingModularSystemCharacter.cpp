@@ -144,6 +144,12 @@ void AFarmingModularSystemCharacter::OnInteract()
 				// ...exit the function
 				return;
 		}
+
+		for (ASeed* seed : SeedArray)
+		{
+			USeedData* seedData = seed->GetSeedData();
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("You picked up a %s"), seedData->SeedType());
+		}
 	}
 	// Otherwise..
 	else
