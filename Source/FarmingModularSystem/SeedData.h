@@ -22,11 +22,11 @@ public:
 
 public:
 	// The type of plant
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString Type;
 
 	// The time to growth
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float TimeToGrowth;
 
 };
