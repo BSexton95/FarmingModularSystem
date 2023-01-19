@@ -6,6 +6,10 @@
 #include "GameFramework/Character.h"
 #include "FarmingModularSystemCharacter.generated.h"
 
+/// <summary>
+/// This class is for the player character and handles camera control, movement, and
+/// temporary inventory management.
+/// </summary>
 UCLASS(config=Game)
 class AFarmingModularSystemCharacter : public ACharacter
 {
@@ -58,8 +62,6 @@ protected:
 	/** Handler for when a touch input stops. */
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
 
-	
-
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -75,35 +77,49 @@ public:
 	/// Allows other class to access the array of seeds but not change it
 	/// </summary>
 	/// <returns>The seed array</returns>
-	const TArray<class ASeed*> GetSeedArray() const { return SeedArray; }
+	TArray<class ASeed*> GetSeedArray() { return SeedArray; }
 	void SetSeedArray(TArray<ASeed*> newSeedArray) { SeedArray = newSeedArray; }
 
-public:
+	/// <summary>
+	/// This function handles overlap events
+	/// </summary>
+	/// <param name="OverlappedComp">The component on the player</param>
+	/// <param name="OtherActor">The actor that is involved in the overlap</param>
+	/// <param name="OtherComp">The component on the actor that is involved in the overlap</param>
+	/// <param name="OtherBodyIndex">The index of the affected body of the actors physics asset(Not being used)</param>
+	/// <param name="bFromSweep">Boolean indicating whether the overlap was generated as a result of a seep (Not being used)</param>
+	/// <param name="SweepResult">This is a struct containing information about the hit result of the seedp if bFromSweep is true (Not being used)</param>
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+	/// <summary>
+	/// This function is called every time the player presses E
+	/// </summary>
 	UFUNCTION()
 	void OnInteract();
 	
 
 public:
-	UPROPERTY()
-	class UCapsuleComponent* TriggerCapsule;
-
-	FTimerHandle TimerToGrowth;
-
+	//The max size of the array of seeds
+	UPROPERTY(EditAnywhere)
 	int MaxArraySize = 4;
 
 private:
 	// Pointer to the plot actor
 	UPROPERTY()
-	class APlot* m_plotActor;
-	class USeedData* m_seedData;
-	
+	class APlot* m_plotActor = nullptr;
 
+	// Pointer to seedDatat
+	UPROPERTY()
+	class USeedData* m_seedData = nullptr;
+	
 	// An array that holds seeds
 	// This represents an inventory in the character class
+	// Should be replaced with an inventroy system
 	UPROPERTY()
 	TArray<class ASeed*> SeedArray;
-};
 
+	//Pointer to the timer
+	UPROPERTY()
+	class UTimer* m_timer = nullptr;
+};

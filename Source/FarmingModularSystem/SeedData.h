@@ -14,15 +14,19 @@ class FARMINGMODULARSYSTEM_API USeedData : public UDataAsset
 {
 	GENERATED_BODY()
 public:
-	void PrintObjectInfo();
+	/// <returns>What type of seed it is</returns>
 	FString SeedType() { return Type; }
-	float SeedGrowthTime() { return DaysToGrowth; }
+	
+	/// <returns>The time it takes for the seed to grow</returns>
+	float SeedGrowthTime() { return TimeToGrowth; }
 
 public:
+	// The type of plant
 	UPROPERTY(EditAnywhere)
 	FString Type;
 
+	// The time to growth
 	UPROPERTY(EditAnywhere)
-	float DaysToGrowth;
+	float TimeToGrowth;
 
 };

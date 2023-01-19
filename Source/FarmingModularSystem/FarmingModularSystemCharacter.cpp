@@ -11,6 +11,7 @@
 #include "SeedData.h"
 #include "Seed.h"
 #include "Plot.h"
+#include "Timer.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AFarmingModularSystemCharacter
@@ -80,64 +81,76 @@ void AFarmingModularSystemCharacter::SetupPlayerInputComponent(class UInputCompo
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AFarmingModularSystemCharacter::OnResetVR);
 
+	// Binds the OnInteract() function the every time the player presses E
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AFarmingModularSystemCharacter::OnInteract);
 }
 
 void AFarmingModularSystemCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	// If the other acter that is involved in this overlap is a plot...
 	if (APlot* plot = Cast<APlot>(OtherActor))
 	{
+		// ...set the pointer of the plot class to be this plot
 		m_plotActor = plot;
 	}
 }
 
 void AFarmingModularSystemCharacter::OnInteract()
 {
-	
-	if (APlot* newPlot = Cast<APlot>(m_plotActor))
+	// After player presses E and if it is a plot actor...
+	if (m_plotActor)
 	{
-		newPlot = m_plotActor;
+		// ...set newPlot to be the plot that is being overlaped
+		APlot* newPlot = m_plotActor;
 
+		// If the plot actor is null...
 		if (!newPlot)
+			// ...exit this function
 			return;
 
+		// If the plot does not have a seed planted...
 		if (!newPlot->HasSeed())
 		{
+			// If the seed array is empty...
 			if (SeedArray.Num() <= 0)
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Array is empty"));
+				// ...exit this function
+				return;
+			// Otherwise...
 			else
 			{
+				// ...Create a new seed and set it to be the first seed in the array of seeds
 				ASeed* seedPlanted = SeedArray[0];
+				// Create a new seed data and set it to be the data that is attached to the first seed in the array of seeds
 				USeedData* seedData = seedPlanted->GetSeedData();
 
+				// Call the plots SeedPlanted function passing the new seed in as a parameter.
 				newPlot->SeedPlanted(seedPlanted);
 
-				GetWorld()->GetTimerManager().SetTimer(TimerToGrowth, newPlot, &APlot::OnHarvest, 1.0f, false, seedData->SeedGrowthTime());
-
+				// Removes the seed that was planted from the arrray
 				SeedArray.RemoveSingle(seedPlanted);
 			}
 		}
-		else if (newPlot->HasSeed() == true)
+		// else if there is a seed planted on the plot...
+		else if (newPlot->HasSeed())
 		{
-			if (GetWorldTimerManager().GetTimerRemaining(TimerToGrowth) <= 0)
+			// If the timer that is on this plot is up...
+			if (newPlot->GetTimer()->IsTimerUp)
 			{
+				// Call the plots Harvest function
 				newPlot->Harvest();
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Plant Harvested"));
 			}
+			// Otherwise...
 			else
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Wait for plant to finish"));
-		}
-
-		for (ASeed* seed : SeedArray)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Seeds Left: %s, Days To Growth: %f"), *seed->GetSeedData()->SeedType(), seed->GetSeedData()->SeedGrowthTime());
+				// ...exit the function
+				return;
 		}
 	}
+	// Otherwise..
 	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Can't interact with anything"));
-	}
+		// ...exit function
+		return;
 
+	// Set the pointer to the plot class back to null
 	m_plotActor = nullptr;
 	
 }

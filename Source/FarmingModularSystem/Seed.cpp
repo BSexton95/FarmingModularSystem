@@ -25,20 +25,6 @@ ASeed::ASeed()
 	CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ASeed::OnOverlapBegin);
 }
 
-// Called when the game starts or when spawned
-void ASeed::BeginPlay()
-{
-	Super::BeginPlay();
-
-}
-
-// Called every frame
-void ASeed::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
 void ASeed::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (APawn* player = Cast<APawn>(OtherActor))
