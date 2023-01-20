@@ -43,6 +43,9 @@ public:
 	UFUNCTION()
 	virtual void OnHarvest();
 
+	UFUNCTION()
+	virtual void OnWater();
+
 	/// <returns>The timer that was created on the plot</returns>
 	UFUNCTION()
 	class UTimer* GetTimer() { return m_timer; }

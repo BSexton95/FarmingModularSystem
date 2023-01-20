@@ -78,3 +78,8 @@ void APlot::OnHarvest()
 	// Set the meshs material to green indicated it is ready to harvest
 	m_materialInstance->SetVectorParameterValue(TEXT("Param"), FColor::Green);
 }
+
+void APlot::OnWater()
+{
+	//if (m_timer->GetWorld()->GetTimerManager().GetTimerRemaining())
+}
