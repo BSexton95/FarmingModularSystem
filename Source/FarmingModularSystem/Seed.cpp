@@ -7,6 +7,7 @@
 #include "SeedData.h"
 #include "FarmingModularSystemCharacter.h"
 #include "Plot.h"
+#include <Kismet/KismetTextLibrary.h>
 
 // Sets default values
 ASeed::ASeed()
@@ -49,6 +50,16 @@ void ASeed::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 			//...add the seed the the array
 			playerCharacterArray.Add(this);
 		}
+
+		FString ArrayString = " ";
+		for (int i = 0; i < playerCharacterArray.Num(); i++)
+		{
+			ArrayString += FString::Printf(TEXT(", %s"), *playerCharacterArray[i]->SeedData->SeedType());
+			
+		}
+		
+		GEngine->ClearOnScreenDebugMessages();
+		GEngine->AddOnScreenDebugMessage(-1, FLT_MAX, FColor::Green, FString::Printf(TEXT("You are holding {%s}"), *ArrayString.Mid(2)));
 
 		// Set the new array to be the array on the player character
 		playerCharacter->SetSeedArray(playerCharacterArray);

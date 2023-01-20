@@ -128,6 +128,16 @@ void AFarmingModularSystemCharacter::OnInteract()
 
 				// Removes the seed that was planted from the arrray
 				SeedArray.RemoveSingle(seedPlanted);
+
+				GEngine->ClearOnScreenDebugMessages();
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("You Planted %s"), *seedData->SeedType()));
+
+				FString ArrayString = " ";
+				for (int i = 0; i < SeedArray.Num(); i++)
+				{
+					ArrayString += FString::Printf(TEXT(", %s"), *SeedArray[i]->SeedData->SeedType());
+				}
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("You have left {%s}"), *ArrayString.Mid(2)));
 			}
 		}
 		// else if there is a seed planted on the plot...
@@ -143,12 +153,6 @@ void AFarmingModularSystemCharacter::OnInteract()
 			else
 				// ...exit the function
 				return;
-		}
-
-		for (ASeed* seed : SeedArray)
-		{
-			USeedData* seedData = seed->GetSeedData();
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("You picked up a %s"), seedData->SeedType());
 		}
 	}
 	// Otherwise..
