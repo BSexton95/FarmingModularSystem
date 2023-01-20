@@ -26,22 +26,22 @@ public:
 	/// </summary>
 	/// <param name="seedPlanted">Seed being planted</param>
 	UFUNCTION()
-	void SeedPlanted(class ASeed* seedPlanted);
+	virtual void SeedPlanted(class ASeed* seedPlanted);
 
 	/// <returns>true if plot has a seed</returns>
-	bool HasSeed() { return m_hasSeed; }
+	virtual bool HasSeed() { return m_hasSeed; }
 
 	/// <summary>
 	/// Function is called when the player has pressed E
 	/// </summary>
 	UFUNCTION()
-	void Harvest();
+	virtual void Harvest();
 
 	/// <summary>
 	/// Function is called when the timer is up
 	/// </summary>
 	UFUNCTION()
-	void OnHarvest();
+	virtual void OnHarvest();
 
 	/// <returns>The timer that was created on the plot</returns>
 	UFUNCTION()
